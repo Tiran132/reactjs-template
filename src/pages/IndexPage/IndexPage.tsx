@@ -47,8 +47,13 @@ const StatusText = styled(Heading)`
 export const IndexPage: FC = () => {
   const initData = useInitData();
 
-  const [userData, setUserData] = useState<IUserInfo | undefined
-  >(undefined);
+  const [userData, setUserData] = useState<IUserInfo | undefined>(undefined);
+  const [masterData, setMasterData] = useState<IUserInfo | undefined>(undefined);
+  // const [masterData, setMasterData] = useState<IUserInfo | undefined>(undefined);
+  
+
+  // const [userData, setUserData] = useState<ISlavesRes | undefined
+  // >(undefined);
 
   useEffect(() => {
     const getRes = async () => {
@@ -60,8 +65,20 @@ export const IndexPage: FC = () => {
       }
     };
 
-    getRes();
-  }, [initData?.user]);
+    const getMasterRes = async () => {
+      if (userData?.master_telegram_id) {
+        const res = await getUserInfo(userData?.master_telegram_id);
+
+        if (res)
+          setMasterData(res);
+      }
+    };
+
+    if (userData)
+      getMasterRes();
+    else
+      getRes();
+  }, [initData?.user, userData]);
 
   if (!initData?.user) return <>as</>;
 
@@ -88,8 +105,10 @@ export const IndexPage: FC = () => {
                   ?
                 </IconButton>
               </Box>
+              
             </StatusText>
           </Flex>
+              { masterData && <Heading size="5">SLAVE of {masterData.name}</Heading>}
           <StatusText>{userData?.balance} SS</StatusText>
         </Flex>
         <Heading size="5" className="title">
@@ -98,7 +117,7 @@ export const IndexPage: FC = () => {
         <TransparentCardFullRadius
           onClick={() =>
             navigator.clipboard.writeText(
-              "https://t.me/slavery?start="+userData?.telegram_id
+              "https://t.me/crypto_slavery_bot?start="+userData?.telegram_id
             )
           }
           variant="surface"
@@ -106,7 +125,7 @@ export const IndexPage: FC = () => {
           <Flex justify="between" align="center" pr="1">
             <Box width="88%">
               <TransparentButton size="3" variant="surface">
-                https://t.me/slavery?start={userData?.telegram_id}
+                https://t.me/crypto_slavery_bot?start={userData?.telegram_id}
               </TransparentButton>
             </Box>
             <IconButton variant="ghost">
@@ -122,7 +141,7 @@ export const IndexPage: FC = () => {
             <TransparentCard variant="surface">
               <Box p={{ initial: "2", xs: "3" }} pb="7" pt="7">
                 <Heading size={{ initial: "5", xs: "8" }} align="center">
-                  {FormatNumberWithSpaces(924)}
+                  {FormatNumberWithSpaces(0)}
                 </Heading>
               </Box>
               <Box align="center">Total slaves</Box>
@@ -132,7 +151,7 @@ export const IndexPage: FC = () => {
             <TransparentCard variant="surface">
               <Box p={{ initial: "2", xs: "3" }} pb="7" pt="7">
                 <Heading size={{ initial: "5", xs: "8" }} align="center">
-                  {FormatNumberWithSpaces(123891)}
+                  {FormatNumberWithSpaces(userData?.income || 0)}
                   <Text size="2" color="gray">
                     {" "}
                     LM / h

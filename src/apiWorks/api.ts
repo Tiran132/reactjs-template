@@ -15,6 +15,7 @@ export interface IUserInfo {
     slave_master: number,
     referral_link: string,
     user_type: string,
+    master_telegram_id?: string
   }
 
 export type ISlavesRes = IUserInfo[]
@@ -22,25 +23,25 @@ export type ISlavesRes = IUserInfo[]
 export const getUserInfo = async (tgId: string) => {
     return axios.get(API_URL + "/users/" + tgId)
         .then((r): IUserInfo => r.data)
-        .catch((e) => alert(e))
+        // .catch((e) => alert(e))
 }
 
 export const getUserSlaves = async (tgId: string) => {
     return axios.get(API_URL + "/get_my_slaves/" + tgId)
     .then((r): ISlavesRes => r.data)
-    .catch((e) => alert(e))
+    // .catch((e) => alert(e))
 }
 
 export const getAvailableSlaves = async (tgId: string) => {
     return axios.get(API_URL + "/get_available_slaves/" + tgId)
     .then((r): ISlavesRes => r.data)
-    .catch((e) => alert(e))
+    // .catch((e) => alert(e))
 }
 
 
 
-export const buySlave = async (masterId: number, slaveId: number) => {
+export const buySlave = async (masterId: string, slaveId: string) => {
     return axios.post(API_URL + `/buy_slave/?owner_id=${masterId}&slave_id=${slaveId}` , "")
     .then((r) => true)
-    .catch((e) => alert(e))
+    // .catch((e) => alert(e))
 }
