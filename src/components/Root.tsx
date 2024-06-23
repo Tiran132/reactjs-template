@@ -4,6 +4,7 @@ import { type FC, useEffect, useMemo } from 'react';
 
 import { App } from '@/components/App.tsx';
 import { ErrorBoundary } from '@/components/ErrorBoundary.tsx';
+import { Theme } from '@radix-ui/themes';
 
 const ErrorBoundaryError: FC<{ error: unknown }> = ({ error }) => (
   <div>
@@ -36,14 +37,23 @@ const Inner: FC = () => {
   return (
     <TonConnectUIProvider manifestUrl={manifestUrl}>
       <SDKProvider acceptCustomStyles debug={debug}>
-        <App/>
+        <Theme 
+          // accentColor="green"
+          grayColor="gray"
+          panelBackground="solid"
+          scaling="100%"
+          radius="full"
+          appearance='dark'
+        >
+          <App/>
+        </Theme>
       </SDKProvider>
     </TonConnectUIProvider>
   );
 };
 
 export const Root: FC = () => (
-  <ErrorBoundary fallback={ErrorBoundaryError}>
-    <Inner/>
-  </ErrorBoundary>
+    <ErrorBoundary fallback={ErrorBoundaryError}>
+      <Inner/>
+    </ErrorBoundary>
 );
